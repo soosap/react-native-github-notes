@@ -8,6 +8,9 @@ import {
   ActivityIndicatorIOS,
 } from 'react-native';
 
+import githubAPI from '../utils/api/github';
+import Dashboard from './Dashboard';
+
 class SearchForm extends Component {
   constructor(props) {
     super(props);
@@ -17,6 +20,29 @@ class SearchForm extends Component {
       isLoading: false,
       hasError: false,
     };
+  }
+
+  handleSubmit = () => {
+    // Update ActivityIndicatorIOS
+    this.setState({ isLoading: true });
+
+    // Fetch data from Github using the GithubAPI
+    // Implementation detail abstracted along the lines of adapter pattern
+    githubAPI.getBio(this.props.username).then(res => {
+      if (res.message === 'Not Found') {
+        this.setState({ error: 'User not found.', isLoading: false });
+      } else {
+        // Reroute to the next screen passing the obtained Github data
+        // This is only possible because we are making use of <NavigatorIOS />
+        this.props.navigator.push({
+          title: res.name || 'Select an option',
+          component: Dashboard,
+          passProps: { userInfo: res }
+        });
+
+        this.setState({ error: '', isLoading: false, username: '' });
+      }
+    });
   }
 
   render() {
