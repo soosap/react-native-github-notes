@@ -1,0 +1,3 @@
+rootProject.name = 'GithubNotes'
+
+include ':app'
