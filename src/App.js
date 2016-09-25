@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
+import SearchForm from './components/SearchForm';
+
 class App extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text>GithubNotes Body Content</Text>
+				<SearchForm />
 			</View>
 		);
 	}
@@ -19,22 +21,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		backgroundColor: '#48bbec',
-	},
-	title: {
-		marginBottom: 20,
-		fontSize: 25,
-		textAlign: 'center',
-		color: '#fff'
-	},
-	search: {
-		height: 50,
-		padding: 4,
-		marginRight: 5,
-		fontSize: 23,
-		borderWidth: 1,
-		borderColor: 'white',
-		borderRadius: 8,
-		color: 'white',
 	},
 	buttonText: {
 		fontSize: 18,
