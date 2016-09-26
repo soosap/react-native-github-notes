@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import React, { Component, PropTypes } from 'react';
+import { View, StyleSheet } from 'react-native';
 
 import SearchForm from './components/SearchForm';
 
 class App extends Component {
+	static propTypes = {
+		navigator: PropTypes.object.isRequired,
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
-				<SearchForm />
+				<SearchForm navigator={this.props.navigator} />
 			</View>
 		);
 	}

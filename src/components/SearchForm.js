@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   Text,
   View,
@@ -12,6 +12,10 @@ import githubAPI from '../utils/api/github';
 import Dashboard from './Dashboard';
 
 class SearchForm extends Component {
+	static propTypes = {
+		navigator: PropTypes.object.isRequired,
+	}
+
   constructor(props) {
     super(props);
 
@@ -28,19 +32,24 @@ class SearchForm extends Component {
 
     // Fetch data from Github using the GithubAPI
     // Implementation detail abstracted along the lines of adapter pattern
-    githubAPI.getBio(this.props.username).then(res => {
-      if (res.message === 'Not Found') {
+    githubAPI.getBio(this.state.username).then(res => {
+      console.log('res: ', res);
+      if (res.data.message === 'Not Found') {
         this.setState({ error: 'User not found.', isLoading: false });
       } else {
         // Reroute to the next screen passing the obtained Github data
         // This is only possible because we are making use of <NavigatorIOS />
         this.props.navigator.push({
-          title: res.name || 'Select an option',
+          title: res.data.name || 'Stranger',
           component: Dashboard,
-          passProps: { userInfo: res }
+          passProps: { userInfo: res.data }
         });
 
-        this.setState({ error: '', isLoading: false, username: '' });
+        this.setState({
+          error: '',
+          isLoading: false,
+          username: '',
+        });
       }
     });
   }
