@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   Text,
   View,
@@ -7,9 +7,19 @@ import {
   StyleSheet,
 } from 'react-native';
 
-class Dashboard extends Component {
-  goToProfile = () => {
+import Profile from './Profile';
 
+class Dashboard extends Component {
+	static propTypes = {
+		navigator: PropTypes.object.isRequired,
+	}
+
+  goToProfile = () => {
+		this.props.navigator.push({
+			title: 'Profile Page',
+			component: Profile,
+			passProps: { userInfo: this.props.userInfo }
+		});
   }
 
   goToRepos = () => {
@@ -47,7 +57,6 @@ class Dashboard extends Component {
   }
 
   render() {
-    console.log('this.props.userInfo: ', this.props.userInfo);
     return (
       <View style={styles.container}>
         <Image source={{ uri: this.props.userInfo.avatar_url }} style={styles.image} />
