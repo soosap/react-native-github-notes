@@ -33,8 +33,6 @@ class SearchForm extends Component {
     // Fetch data from Github using the GithubAPI
     // Implementation detail abstracted along the lines of adapter pattern
     githubAPI.getBio(this.state.username).then(res => {
-      console.log('res: ', res);
-
       // Reroute to the next screen passing the obtained Github data
       // This is only possible because we are making use of <NavigatorIOS />
       this.props.navigator.push({
