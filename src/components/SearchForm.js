@@ -5,16 +5,16 @@ import {
   StyleSheet,
   TextInput,
   TouchableHighlight,
-  ActivityIndicatorIOS,
+  ActivityIndicator,
 } from 'react-native';
 
 import githubAPI from '../utils/api/github';
 import Dashboard from './Dashboard';
 
 class SearchForm extends Component {
-	static propTypes = {
-		navigator: PropTypes.object.isRequired,
-	}
+  static propTypes = {
+    navigator: PropTypes.object.isRequired,
+  }
 
   constructor(props) {
     super(props);
@@ -34,27 +34,29 @@ class SearchForm extends Component {
     // Implementation detail abstracted along the lines of adapter pattern
     githubAPI.getBio(this.state.username).then(res => {
       console.log('res: ', res);
-      if (res.data.message === 'Not Found') {
-        this.setState({ error: 'User not found.', isLoading: false });
-      } else {
-        // Reroute to the next screen passing the obtained Github data
-        // This is only possible because we are making use of <NavigatorIOS />
-        this.props.navigator.push({
-          title: res.data.name || 'Stranger',
-          component: Dashboard,
-          passProps: { userInfo: res.data }
-        });
 
-        this.setState({
-          error: '',
-          isLoading: false,
-          username: '',
-        });
-      }
+      // Reroute to the next screen passing the obtained Github data
+      // This is only possible because we are making use of <NavigatorIOS />
+      this.props.navigator.push({
+        title: res.data.name || 'StrangerX',
+        component: Dashboard,
+        passProps: { userInfo: res.data }
+      });
+
+      this.setState({
+        error: '',
+        isLoading: false,
+        username: '',
+      });
+    }).catch(() => {
+      this.setState({ error: 'User not found.', isLoading: false });
     });
   }
 
+
   render() {
+    const formErrors = this.state.error ?
+      <Text style={styles.errorText}>{this.state.error}</Text> : null;
     return (
       <View>
         <Text style={styles.title}>Search for a Github User</Text>
@@ -72,7 +74,14 @@ class SearchForm extends Component {
         >
           <Text style={styles.buttonText}>SEARCH</Text>
         </TouchableHighlight>
+        {formErrors}
 
+        <ActivityIndicator
+          animating={this.state.isLoading}
+          color="#111"
+          size="large"
+          style={styles.spinner}
+        />
       </View>
     );
   }
@@ -96,6 +105,13 @@ const styles = StyleSheet.create({
     color: '#111',
     alignSelf: 'center',
   },
+  errorText: {
+    color: '#F81515',
+    fontWeight: '600',
+    fontSize: 18,
+    alignSelf: 'center',
+    marginTop: 10,
+  },
   search: {
     height: 50,
     padding: 4,
@@ -106,6 +122,9 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderRadius: 6,
     color: 'white',
+  },
+  spinner: {
+    marginTop: 30,
   },
   title: {
     marginBottom: 20,
