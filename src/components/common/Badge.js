@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 
-class Badge extends Component {
+export class Badge extends Component {
 	static propTypes = {
 		userInfo: PropTypes.object.isRequired,
 	}
@@ -42,5 +42,3 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 });
-
-export default Badge;

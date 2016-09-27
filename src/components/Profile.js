@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 
-import Badge from './Badge';
-import { Separator } from './common';
+import { Badge, Separator } from './common';
 
 class Profile extends Component {
   getRowTitle = (userInfo, piece) => {
