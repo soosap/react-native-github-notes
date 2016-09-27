@@ -8,22 +8,44 @@ import {
 } from 'react-native';
 
 import Profile from './Profile';
+import Repositories from './Repositories';
+import githubAPI from '../utils/api/github';
 
 class Dashboard extends Component {
-	static propTypes = {
-		navigator: PropTypes.object.isRequired,
-	}
+  static propTypes = {
+    navigator: PropTypes.object.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      repos: [],
+    };
+  }
 
   goToProfile = () => {
-		this.props.navigator.push({
-			title: 'Profile Page',
-			component: Profile,
-			passProps: { userInfo: this.props.userInfo }
-		});
+    this.props.navigator.push({
+      title: 'Profile',
+      component: Profile,
+      passProps: { userInfo: this.props.userInfo }
+    });
   }
 
   goToRepos = () => {
-
+    githubAPI.getRepos(this.props.userInfo.login).then(res => {
+      console.log('res: ', res);
+      this.setState({ repos: res.data }, () => {
+        this.props.navigator.push({
+          title: 'Repositories',
+          component: Repositories,
+          passProps: {
+            userInfo: this.props.userInfo,
+            repos: this.state.repos,
+          },
+        });
+      });
+    });
   }
 
   goToNotes = () => {
