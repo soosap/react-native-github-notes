@@ -9,6 +9,8 @@ import {
 
 import Profile from './Profile';
 import Repositories from './Repositories';
+import Notes from './Notes';
+
 import githubAPI from '../utils/api/github';
 
 class Dashboard extends Component {
@@ -45,11 +47,21 @@ class Dashboard extends Component {
           },
         });
       });
-    });
+    }).catch(error => console.log('error: ', error));
   }
 
   goToNotes = () => {
-
+		githubAPI.getNotes(this.props.userInfo.login).then(snapshot => {
+			console.log('snapshot.val(): ', snapshot.val());
+			this.props.navigator.push({
+				component: Notes,
+				title: 'Notes',
+				passProps: {
+					notes: snapshot.val() || {},
+					userInfo: this.props.userInfo,
+				},
+			});
+		}).catch(error => console.log(error));
   }
 
   makeBackground = (btnIndex) => {
